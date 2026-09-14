@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/Safal778/fragments/issues"
   },
-  "homepage": "https://github.com/Safal778/fragments#readme"
+  "homepage": "https://github.com/Safal778/fragments#readme",
+  "devDependencies": {
+    "prettier": "3.9.6"
+  }
 }
