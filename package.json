@@ -1,24 +1,16 @@
 {
   "name": "fragments",
-  "version": "1.0.0",
-  "description": "LABS",
-  "main": "index.js",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Fragments back-end API",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "lint": "eslint \"./src/**/*.js\""
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Safal778/fragments.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/Safal778/fragments/issues"
-  },
-  "homepage": "https://github.com/Safal778/fragments#readme",
-  "devDependencies": {
-    "prettier": "3.9.6"
-  }
+  "author": "REPLACE WITH YOUR NAME",
+  "license": "UNLICENSED"
 }
