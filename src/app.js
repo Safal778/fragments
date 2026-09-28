@@ -3,6 +3,8 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const passport = require('passport');
+const authenticate = require('./auth');
 
 const logger = require('./logger');
 const pino = require('pino-http')({
@@ -21,6 +23,10 @@ app.use(helmet());
 
 // Use CORS middleware so we can make requests across origins
 app.use(cors());
+
+// Set up our passport authentication middleware
+app.use(passport.initialize());
+passport.use(authenticate.strategy());
 
 // Define our routes
 app.use('/', require('./routes'));
@@ -55,5 +61,4 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Export our `app` so we can access it in server.js
 module.exports = app;

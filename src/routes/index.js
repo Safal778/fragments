@@ -5,8 +5,8 @@ const express = require('express');
 const { version, author } = require('../../package.json');
 
 const router = express.Router();
-
-router.use(`/v1`, require('./api'));
+const { authenticate } = require('../auth');
+router.use(`/v1`, authenticate(), require('./api'));
 
 router.get('/', (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
