@@ -4,7 +4,7 @@ const passport = require('passport');
 const BearerStrategy = require('passport-http-bearer').Strategy;
 const { CognitoJwtVerifier } = require('aws-jwt-verify');
 
-const logger = require('./logger');
+const logger = require('../logger');
 
 // We expect AWS_COGNITO_POOL_ID and AWS_COGNITO_CLIENT_ID to be defined.
 if (!(process.env.AWS_COGNITO_POOL_ID && process.env.AWS_COGNITO_CLIENT_ID)) {
@@ -17,7 +17,7 @@ const jwtVerifier = CognitoJwtVerifier.create({
   tokenUse: 'id',
 });
 
-logger.info('Configured to use AWS Cognito for Authorization');
+logger.info('Using AWS Cognito for auth');
 
 jwtVerifier
   .hydrate()
