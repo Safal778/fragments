@@ -1,0 +1,29 @@
+
+# Git files
+.git/
+.github/
+.gitignore
+
+# VS Code settings
+.vscode/
+
+# Dependencies
+node_modules/
+
+# Test files
+tests/
+!tests/
+!tests/.htpasswd
+
+# Coverage reports
+coverage/
+
+# Environment files and secrets
+.env
+.env.*
+!env.jest
+
+# Code quality and test configs
+eslint.config.mjs
+.prettier*
+jest*

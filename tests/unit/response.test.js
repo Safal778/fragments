@@ -1,5 +1,3 @@
-// tests/unit/response.test.js
-
 const { createErrorResponse, createSuccessResponse } = require('../../src/response');
 
 describe('API Responses', () => {

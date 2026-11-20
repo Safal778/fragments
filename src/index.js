@@ -1,5 +1,3 @@
-// src/index.js
-
 require('dotenv').config();
 
 const logger = require('./logger');
@@ -15,5 +13,3 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 require('./server');
-
-

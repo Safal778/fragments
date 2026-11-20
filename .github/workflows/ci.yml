@@ -30,6 +30,9 @@ jobs:
       - name: Install node dependencies
         run: npm ci
 
+      - name: Check formatting
+        run: npm run format:check
+
       - name: Run ESLint
         run: npm run lint
 
@@ -46,8 +49,8 @@ jobs:
           node-version: 'lts/*'
           cache: 'npm'
 
-      - name: Install node dependencies and run Tests
-        # Use `install-ci-test` to install dependencies (like `npm ci`) and then
-        # run tests (like `npm test`) in one step.
-        # See: https://docs.npmjs.com/cli/v8/commands/npm-install-ci-test
-        run: npm install-ci-test
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: Run unit tests with coverage
+        run: npm run coverage

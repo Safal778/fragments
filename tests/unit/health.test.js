@@ -1,11 +1,7 @@
-// tests/unit/health.test.js
-
 const request = require('supertest');
 
-// Get our Express app object (we don't need the server part)
 const app = require('../../src/app');
 
-// Get the version and author from our package.json
 const { version, author } = require('../../package.json');
 
 describe('/ health check', () => {
@@ -14,9 +10,9 @@ describe('/ health check', () => {
     expect(res.statusCode).toBe(200);
   });
 
-  test('should return Cache-Control: no-cache header', async () => {
+  test('should prevent the health check response from being cached', async () => {
     const res = await request(app).get('/');
-    expect(res.headers['cache-control']).toEqual('no-cache');
+    expect(res.headers['cache-control']).toEqual('no-store');
   });
 
   test('should return status: ok in response', async () => {
