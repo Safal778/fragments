@@ -1,13 +1,12 @@
 
-# Lab 5 - Dockerfile for Fragments Microservice
+# Lab 6 - Optimized Fragments Microservice Dockerfile
 
-# Use the same Node.js version as our local environment
-FROM node:24.21.0
+# Use a smaller Node.js base image
+FROM node:24-alpine
 
-# Image metadata
 LABEL description="Fragments Node.js Microservice"
 
-# Set environment variables
+ENV NODE_ENV=production
 ENV PORT=8080
 ENV NPM_CONFIG_LOGLEVEL=warn
 ENV NPM_CONFIG_COLOR=false
@@ -15,17 +14,20 @@ ENV NPM_CONFIG_COLOR=false
 # Set working directory
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy dependency manifests first for Docker layer caching
+COPY package.json package-lock.json ./
 
-# Install dependencies
-RUN npm install
+# Install production dependencies only
+RUN npm ci --omit=dev && npm cache clean --force
 
-# Copy application source code
-COPY ./src ./src
+# Copy application source
+COPY --chown=node:node ./src ./src
+
+# Run as a non-root user
+USER node
 
 # Document the application port
 EXPOSE 8080
 
-# Start the Fragments server
+# Start the server
 CMD ["npm", "start"]
