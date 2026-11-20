@@ -110,4 +110,27 @@ describe('GET /v1/fragments', () => {
   test('GET /v1/fragments?expand=1 requires authentication', async () => {
     await request(app).get('/v1/fragments?expand=1').expect(401);
   });
+
+  test('GET /v1/fragments handles database errors', async () => {
+    const Fragment = require('../../src/model/fragment');
+
+    const spy = jest.spyOn(Fragment, 'byUser').mockRejectedValueOnce(new Error('database failure'));
+
+    try {
+      const response = await request(app)
+        .get('/v1/fragments')
+        .auth('test-user1@fragments-testing.com', 'test-password1');
+
+      expect(response.statusCode).toBe(500);
+      expect(response.body).toEqual({
+        status: 'error',
+        error: {
+          code: 500,
+          message: 'database failure',
+        },
+      });
+    } finally {
+      spy.mockRestore();
+    }
+  });
 });

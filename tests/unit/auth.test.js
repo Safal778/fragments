@@ -63,4 +63,58 @@ describe('auth configuration', () => {
       'Missing authorization configuration: configure Cognito or HTTP Basic Auth.'
     );
   });
+
+  describe('auth middleware error handling', () => {
+    test('passes unexpected Passport authentication errors to next', () => {
+      const passport = require('passport');
+      const authenticate = require('../../src/auth/auth-middleware');
+
+      const error = new Error('authentication failure');
+
+      const spy = jest
+        .spyOn(passport, 'authenticate')
+        .mockImplementation((strategy, options, callback) => {
+          return () => callback(error, null);
+        });
+
+      try {
+        const req = {};
+        const res = {};
+        const next = jest.fn();
+
+        authenticate('http')(req, res, next);
+
+        expect(next).toHaveBeenCalledWith(error);
+      } finally {
+        spy.mockRestore();
+      }
+    });
+
+    test('rejects authenticated users without an email', () => {
+      const passport = require('passport');
+      const authenticate = require('../../src/auth/auth-middleware');
+
+      const spy = jest
+        .spyOn(passport, 'authenticate')
+        .mockImplementation((strategy, options, callback) => {
+          return () => callback(null, { id: 'user123' });
+        });
+
+      try {
+        const req = {};
+        const res = {};
+        const next = jest.fn();
+
+        authenticate('http')(req, res, next);
+
+        expect(next).toHaveBeenCalledWith(
+          expect.objectContaining({
+            message: 'authenticated user is missing an email',
+          })
+        );
+      } finally {
+        spy.mockRestore();
+      }
+    });
+  });
 });

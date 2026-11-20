@@ -39,4 +39,38 @@ describe('POST /v1/fragments', () => {
     expect(response.statusCode).toBe(415);
     expect(response.body.status).toBe('error');
   });
+
+  test('rejects requests with malformed Content-Type', async () => {
+    const response = await request(app)
+      .post('/v1/fragments')
+      .auth('test-user1@fragments-testing.com', 'test-password1')
+      .set('Content-Type', 'invalid content type')
+      .send('hello');
+
+    expect(response.statusCode).toBe(415);
+    expect(response.body.status).toBe('error');
+    expect(response.body.error.code).toBe(415);
+  });
+
+  test('handles unexpected errors when creating a fragment', async () => {
+    const Fragment = require('../../src/model/fragment');
+
+    const spy = jest
+      .spyOn(Fragment.prototype, 'setData')
+      .mockRejectedValueOnce(new Error('database failure'));
+
+    try {
+      const response = await request(app)
+        .post('/v1/fragments')
+        .auth('test-user1@fragments-testing.com', 'test-password1')
+        .set('Content-Type', 'text/plain')
+        .send('hello');
+
+      expect(response.statusCode).toBe(500);
+      expect(response.body.status).toBe('error');
+      expect(response.body.error.code).toBe(500);
+    } finally {
+      spy.mockRestore();
+    }
+  });
 });
